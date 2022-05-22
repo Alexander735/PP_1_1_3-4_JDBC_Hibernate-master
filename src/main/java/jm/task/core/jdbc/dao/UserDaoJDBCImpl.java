@@ -28,11 +28,14 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void createUsersTable() {
-        String SQL = "CREATE TABLE Users " +
-                "(id LONG PRIMARY KEY AUTO_INCREMENT, " +
-                " name VARCHAR(20) NOT NULL, " +
-                " lastName VARCHAR(20) " +
-                " age BYTE)";
+        String SQL = """
+                    CREATE TABLE Users (
+                        id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+                        name varchar(255) NOT NULL,
+                        lastName varchar(255),
+                        age TINYINT
+                    )
+                    """;
 
         try {
             Statement statement = connection.createStatement();
