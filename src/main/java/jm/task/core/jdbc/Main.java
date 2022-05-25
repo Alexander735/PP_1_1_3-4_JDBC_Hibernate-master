@@ -21,7 +21,7 @@ public class Main {
 //        userDao.saveUser("Name4", "LastName4", (byte) 38);
 //
 //        userDao.removeUserById(1);
-////        userDao.getAllUsers();
+//        userDao.getAllUsers();
 //        userDao.cleanUsersTable();
 //        userDao.dropUsersTable();
 
@@ -29,6 +29,9 @@ public class Main {
 
 //        userService.createUsersTable();
 //        userService.saveUser("Ben","Kenobi", (byte) 120);
+//        userService.saveUser("Luke","SkyWorker", (byte) 35);
+//        userService.cleanUsersTable();
 //        userService.removeUserById(1);
+        userService.dropUsersTable();
     }
 }

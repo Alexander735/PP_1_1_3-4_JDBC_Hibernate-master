@@ -67,7 +67,7 @@ public class UserDaoHibernateImpl implements UserDao {
 
         try {
             tx = session.beginTransaction();
-            String SQL = "DROP TABLE IF EXISTS users";
+            String SQL = "DROP TABLE IF EXISTS Users";
             Query query = session.createSQLQuery(SQL).addEntity(User.class);
             tx.commit();
 
@@ -91,9 +91,9 @@ public class UserDaoHibernateImpl implements UserDao {
             session.save(new User(name, lastName, age));
             tx.commit();
 
-            System.out.println("Пользователь добавлен: имя " + name
-                            + "--фамилия " + lastName
-                            + "--возраст "+ age);
+            System.out.println("Пользователь добавлен: имя--" + name
+                            + " фамилия--" + lastName
+                            + " возраст--" + age);
 
         } catch (HibernateException e) {
             if (tx != null) {
