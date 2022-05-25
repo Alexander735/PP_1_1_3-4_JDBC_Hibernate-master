@@ -24,7 +24,7 @@ public class UserDaoHibernateImpl implements UserDao {
 
     }
 
-// Прописать (1)создание и (2)удаление таблицы, (3)добавление и (4--ДА)удаление пользователя,
+// Прописать (1--ДА)создание и (2)удаление таблицы, (3)добавление и (4--ДА)удаление пользователя,
 // (5)вывод и (6)удаление всех пользователей
 
     @Override
@@ -40,7 +40,7 @@ public class UserDaoHibernateImpl implements UserDao {
                         age TINYINT
                     )
                     """;
-            Query query = session.createNativeQuery(SQL).addEntity(User.class);
+            session.createSQLQuery(SQL).addEntity(User.class);
 
             session.getTransaction().commit();
             sessionFactory.close();
