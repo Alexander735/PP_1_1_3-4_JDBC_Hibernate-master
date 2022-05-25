@@ -6,6 +6,9 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -106,9 +109,16 @@ public class UserDaoHibernateImpl implements UserDao {
             Session session = sessionFactory.openSession();
             session.beginTransaction();
 
-//            usersList = session.createCriteria(User.class).list(); -- не работает
+            CriteriaBuilder cb = session.getCriteriaBuilder();
+            CriteriaQuery cq = cb.createQuery(User.class);
+            Root<User> root = cq.from(User.class);
 
-            usersList = session.createQuery("from User").getResultList();
+            Query query = session.createQuery(cq);
+            usersList = query.getResultList();
+
+//          usersList = session.createCriteria(User.class).list(); -- не работает
+
+//          usersList = session.createQuery("from User").getResultList(); -- не работает
 
             session.getTransaction().commit();
             session.close();
