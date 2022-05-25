@@ -16,7 +16,7 @@ public class UserDaoHibernateImpl implements UserDao {
         try {
             sessionFactory = Util.getSessionFactory();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 
@@ -24,7 +24,7 @@ public class UserDaoHibernateImpl implements UserDao {
 
     }
 
-// Прописать (1--ДА)создание и (2--ДА)удаление таблицы, (3--НЕТ)добавление и (4--ДА)удаление пользователя,
+// Прописать (1--ДА)создание и (2--ДА)удаление таблицы, (3--ДА)добавление и (4--ДА)удаление пользователя,
 // (5--НЕТ)вывод и (6--ДА)удаление всех пользователей
 
     @Override
@@ -43,7 +43,7 @@ public class UserDaoHibernateImpl implements UserDao {
             session.createSQLQuery(SQL).addEntity(User.class);
 
             session.getTransaction().commit();
-            sessionFactory.close();
+            session.close();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -60,7 +60,7 @@ public class UserDaoHibernateImpl implements UserDao {
             Query query = session.createSQLQuery(SQL).addEntity(User.class);
 
             session.getTransaction().commit();
-            sessionFactory.close();
+            session.close();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -76,7 +76,7 @@ public class UserDaoHibernateImpl implements UserDao {
             session.save(new User(name, lastName, age));
 
             session.getTransaction().commit();
-            sessionFactory.close();
+            session.close();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -92,7 +92,7 @@ public class UserDaoHibernateImpl implements UserDao {
             session.remove(session.get(User.class, id));
 
             session.getTransaction().commit();
-            sessionFactory.close();
+            session.close();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -109,7 +109,7 @@ public class UserDaoHibernateImpl implements UserDao {
             usersList = session.createQuery("FROM User", User.class).getResultList();
 
             session.getTransaction().commit();
-            sessionFactory.close();
+            session.close();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -127,7 +127,7 @@ public class UserDaoHibernateImpl implements UserDao {
             session.createQuery("delete User").executeUpdate();
 
             session.getTransaction().commit();
-            sessionFactory.close();
+            session.close();
 
         } catch (Exception e) {
             e.printStackTrace();
