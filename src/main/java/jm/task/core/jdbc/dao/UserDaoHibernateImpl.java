@@ -101,12 +101,14 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public List<User> getAllUsers() {
-        List <User> usersList = new ArrayList<>();
+        List <User> usersList = null;
         try {
             Session session = sessionFactory.openSession();
             session.beginTransaction();
 
-            usersList = session.createQuery("FROM User", User.class).getResultList();
+//            usersList = session.createCriteria(User.class).list(); -- не работает
+
+            usersList = session.createQuery("from User").getResultList();
 
             session.getTransaction().commit();
             session.close();
