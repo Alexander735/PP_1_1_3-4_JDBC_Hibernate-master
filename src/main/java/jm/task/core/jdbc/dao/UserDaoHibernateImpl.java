@@ -24,8 +24,8 @@ public class UserDaoHibernateImpl implements UserDao {
 
     }
 
-// Прописать (1--ДА)создание и (2)удаление таблицы, (3)добавление и (4--ДА)удаление пользователя,
-// (5)вывод и (6)удаление всех пользователей
+// Прописать (1--ДА)создание и (2--ДА)удаление таблицы, (3--НЕТ)добавление и (4--ДА)удаление пользователя,
+// (5--НЕТ)вывод и (6--ДА)удаление всех пользователей
 
     @Override
     public void createUsersTable() {
@@ -56,7 +56,8 @@ public class UserDaoHibernateImpl implements UserDao {
             Session session = sessionFactory.openSession();
             session.beginTransaction();
 
-            //код здесь
+            String SQL = "DROP TABLE IF EXISTS users";
+            Query query = session.createSQLQuery(SQL).addEntity(User.class);
 
             session.getTransaction().commit();
             sessionFactory.close();
@@ -72,7 +73,7 @@ public class UserDaoHibernateImpl implements UserDao {
             Session session = sessionFactory.openSession();
             session.beginTransaction();
 
-            session.persist(new User(name, lastName, age));
+            session.save(new User(name, lastName, age));
 
             session.getTransaction().commit();
             sessionFactory.close();
@@ -105,8 +106,7 @@ public class UserDaoHibernateImpl implements UserDao {
             Session session = sessionFactory.openSession();
             session.beginTransaction();
 
-            usersList = session.createQuery(String.valueOf(User.class))
-                    .list();
+            usersList = session.createQuery("FROM User", User.class).getResultList();
 
             session.getTransaction().commit();
             sessionFactory.close();
@@ -124,7 +124,7 @@ public class UserDaoHibernateImpl implements UserDao {
             Session session = sessionFactory.openSession();
             session.beginTransaction();
 
-            //код здесь
+            session.createQuery("delete User").executeUpdate();
 
             session.getTransaction().commit();
             sessionFactory.close();
