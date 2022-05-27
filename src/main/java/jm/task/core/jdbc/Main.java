@@ -25,13 +25,13 @@ public class Main {
 //        userDao.cleanUsersTable();
 //        userDao.dropUsersTable();
 
-        UserService userService = new UserServiceImpl();
-
-        userService.createUsersTable();
-//        userService.saveUser("Ben","Kenobi", (byte) 120);
-//        userService.saveUser("Luke","SkyWorker", (byte) 35);
-//        userService.cleanUsersTable();
+//        UserService userService = new UserServiceImpl();
+//
+//        userService.createUsersTable();
+////        userService.saveUser("Ben","Kenobi", (byte) 120);
+////        userService.saveUser("Luke","SkyWorker", (byte) 35);
+////        userService.cleanUsersTable();
 //        userService.removeUserById(1);
-//        userService.dropUsersTable();
+////        userService.dropUsersTable();
     }
 }

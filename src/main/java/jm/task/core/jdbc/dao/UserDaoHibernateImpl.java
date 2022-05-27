@@ -6,7 +6,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.query.Query;
+
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -38,7 +38,7 @@ public class UserDaoHibernateImpl implements UserDao {
         try {
             transaction = session.beginTransaction();
             String SQL = """
-                    CREATE TABLE IF NOT EXISTS Users (
+                    CREATE TABLE IF NOT EXISTS User (
                         id BIGINT PRIMARY KEY AUTO_INCREMENT NOT NULL,
                         name VARCHAR(255) NOT NULL,
                         lastName VARCHAR(255) NOT NULL,
@@ -65,7 +65,7 @@ public class UserDaoHibernateImpl implements UserDao {
 
         try {
             transaction = session.beginTransaction();
-            String SQL = "DROP TABLE IF EXISTS Users";
+            String SQL = "DROP TABLE IF EXISTS User";
             session.createSQLQuery(SQL).executeUpdate();
             transaction.commit();
 
@@ -110,7 +110,7 @@ public class UserDaoHibernateImpl implements UserDao {
 
         try {
             transaction = session.beginTransaction();
-            session.delete(session.get(User.class, id));
+            session.remove(session.get(User.class, id));
             transaction.commit();
 
             System.out.println("Пользователь удалён: id == " + id);
@@ -133,17 +133,16 @@ public class UserDaoHibernateImpl implements UserDao {
 
         try {
             transaction = session.beginTransaction();
-
-            CriteriaBuilder cb = session.getCriteriaBuilder();
-            CriteriaQuery cq = cb.createQuery(User.class);
-            Root<User> root = cq.from(User.class);
-
-            Query query = session.createQuery(cq);
-            usersList = query.getResultList();
-
+            usersList = session.createQuery("from User").list();
             transaction.commit();
-//          usersList = session.createCriteria(User.class).list(); -- не работает
-//          usersList = session.createQuery("from User").getResultList(); -- не работает
+
+//            CriteriaBuilder cb = session.getCriteriaBuilder();
+//            CriteriaQuery cq = cb.createQuery(User.class);
+//            Root<User> root = cq.from(User.class);
+//
+//            Query query = session.createQuery(cq);
+//            usersList = query.getResultList();
+
         } catch (HibernateException e) {
             if (transaction != null) {
                 transaction.rollback();
