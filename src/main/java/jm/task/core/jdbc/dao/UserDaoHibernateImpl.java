@@ -29,30 +29,28 @@ public class UserDaoHibernateImpl implements UserDao {
 
     }
 
-// Прописать (1--ДА)создание и (2--НЕТ)удаление таблицы, (3--ДА)добавление и (4--ДА)удаление пользователя,
-// (5--ДА)вывод и (6--ДА)удаление всех пользователей
 
     @Override
     public void createUsersTable() {
-        Transaction tx = null;
+        Transaction transaction = null;
         Session session = sessionFactory.openSession();
 
         try {
-            tx = session.beginTransaction();
+            transaction = session.beginTransaction();
             String SQL = """
-                    CREATE TABLE Users (
-                        id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-                        name varchar(255) NOT NULL,
-                        lastName varchar(255),
-                        age TINYINT
+                    CREATE TABLE IF NOT EXISTS Users (
+                        id BIGINT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+                        name VARCHAR(255) NOT NULL,
+                        lastName VARCHAR(255) NOT NULL,
+                        age TINYINT NOT NULL
                     )
                     """;
-            session.createSQLQuery(SQL).addEntity(User.class);
-            tx.commit();
+            session.createSQLQuery(SQL).executeUpdate();
+            transaction.commit();
 
         } catch (HibernateException e) {
-            if (tx != null) {
-                tx.rollback();
+            if (transaction != null) {
+                transaction.rollback();
                 throw e;
             }
         } finally {
@@ -62,18 +60,18 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void dropUsersTable() {
-        Transaction tx = null;
+        Transaction transaction = null;
         Session session = sessionFactory.openSession();
 
         try {
-            tx = session.beginTransaction();
+            transaction = session.beginTransaction();
             String SQL = "DROP TABLE IF EXISTS Users";
-            Query query = session.createSQLQuery(SQL).addEntity(User.class);
-            tx.commit();
+            session.createSQLQuery(SQL).executeUpdate();
+            transaction.commit();
 
         } catch (HibernateException e) {
-            if (tx != null) {
-                tx.rollback();
+            if (transaction != null) {
+                transaction.rollback();
                 throw e;
             }
         } finally {
@@ -83,21 +81,21 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void saveUser(String name, String lastName, byte age) {
-        Transaction tx = null;
+        Transaction transaction = null;
         Session session = sessionFactory.openSession();
 
         try {
-            tx = session.beginTransaction();
+            transaction = session.beginTransaction();
             session.save(new User(name, lastName, age));
-            tx.commit();
+            transaction.commit();
 
             System.out.println("Пользователь добавлен: имя--" + name
                             + " фамилия--" + lastName
                             + " возраст--" + age);
 
         } catch (HibernateException e) {
-            if (tx != null) {
-                tx.rollback();
+            if (transaction != null) {
+                transaction.rollback();
                 throw e;
             }
         } finally {
@@ -107,19 +105,19 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void removeUserById(long id) {
-        Transaction tx = null;
+        Transaction transaction = null;
         Session session = sessionFactory.openSession();
 
         try {
-            tx = session.beginTransaction();
-            session.remove(session.get(User.class, id));
-            tx.commit();
+            transaction = session.beginTransaction();
+            session.delete(session.get(User.class, id));
+            transaction.commit();
 
             System.out.println("Пользователь удалён: id == " + id);
 
         } catch (HibernateException e) {
-            if (tx != null) {
-                tx.rollback();
+            if (transaction != null) {
+                transaction.rollback();
                 throw e;
             }
         } finally {
@@ -130,11 +128,11 @@ public class UserDaoHibernateImpl implements UserDao {
     @Override
     public List<User> getAllUsers() {
         List <User> usersList = new ArrayList<>();
-        Transaction tx = null;
+        Transaction transaction = null;
         Session session = sessionFactory.openSession();
 
         try {
-            tx = session.beginTransaction();
+            transaction = session.beginTransaction();
 
             CriteriaBuilder cb = session.getCriteriaBuilder();
             CriteriaQuery cq = cb.createQuery(User.class);
@@ -143,12 +141,12 @@ public class UserDaoHibernateImpl implements UserDao {
             Query query = session.createQuery(cq);
             usersList = query.getResultList();
 
-            tx.commit();
+            transaction.commit();
 //          usersList = session.createCriteria(User.class).list(); -- не работает
 //          usersList = session.createQuery("from User").getResultList(); -- не работает
         } catch (HibernateException e) {
-            if (tx != null) {
-                tx.rollback();
+            if (transaction != null) {
+                transaction.rollback();
                 throw e;
             }
         } finally {
@@ -160,17 +158,17 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void cleanUsersTable() {
-        Transaction tx = null;
+        Transaction transaction = null;
         Session session = sessionFactory.openSession();
 
         try {
-            tx = session.beginTransaction();
+            transaction = session.beginTransaction();
             session.createQuery("delete User").executeUpdate();
-            tx.commit();
+            transaction.commit();
 
         } catch (HibernateException e) {
-            if (tx != null) {
-                tx.rollback();
+            if (transaction != null) {
+                transaction.rollback();
                 throw e;
             }
         } finally {
